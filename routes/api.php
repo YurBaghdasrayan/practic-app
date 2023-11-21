@@ -20,6 +20,7 @@ Route::post('/login', [\App\Http\Controllers\LoginController::class, 'store']);
 
 Route::group(['middleware' => ['auth:api']], function () {
 	Route::post('/post/{post}', [\App\Http\Controllers\Post\PostController::class, 'update']);
+	Route::get('/post/{post?}/{lang?}', [\App\Http\Controllers\Post\PostController::class, 'show']);
 	Route::post('/comment', [\App\Http\Controllers\Comment\CommentController::class, 'store']);
 		Route::post('/reply-comment', [\App\Http\Controllers\ReplyComment\ReplyCommentController::class, 'store']);
 	Route::resource('/post', \App\Http\Controllers\Post\PostController::class);

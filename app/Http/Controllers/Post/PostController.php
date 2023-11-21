@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Post;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PostRequest;
 use App\Models\Post;
+use App\Models\PostContext;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 
@@ -42,9 +43,9 @@ class PostController extends Controller
 	/**
 	 * Display the specified resource.
 	 */
-	public function show(string $id, PostService $service)
+	public function show(string $id, $lang, PostService $service)
 	{
-		$postShow = Post::find($id);
+		$postShow = PostContext::where('post_id', $id)->where('lang', $lang)->get();
 		
 		return response()->json([
 			'success' => true,
@@ -65,7 +66,7 @@ class PostController extends Controller
 	 */
 	public function update(PostRequest $request, PostService $service, string $id)
 	{
-		$service->update($id,$request);
+		$service->update($id, $request);
 		return response()->json([
 			'success' => true,
 			'message' => 'post successfully updated'
