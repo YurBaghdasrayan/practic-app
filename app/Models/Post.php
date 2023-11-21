@@ -21,4 +21,13 @@ class Post extends Model
 		return $this->hasMany(Comment::class);
 	}
 	
+	public function postcontext(): \Illuminate\Database\Eloquent\Relations\HasOne
+	{
+		return $this->hasOne(PostContext::class);
+	}
+	
+	public function images()
+	{
+		return $this->hasMany(Image::class);
+	}
 }

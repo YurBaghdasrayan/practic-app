@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Image;
 use App\Models\Post;
+use App\Models\PostContext;
+use Illuminate\Support\Facades\DB;
 
 class PostService
 {
@@ -12,17 +15,34 @@ class PostService
 	 */
 	public function store($request): void
 	{
-		$image = $request->file('image');
-		$destinationPath = 'public/uploads';
-		$originalFile = time() . $image->getClientOriginalName();
-		$image->storeAs($destinationPath, $originalFile);
 		
-		Post::create([
-			'name' => $request->name,
-			'description' => $request->description,
-			'user_id' => auth()->user()->id,
-			'image' => $originalFile
-		]);
+		try {
+			DB::beginTransaction();
+			
+			$image = $request->file('image');
+			$destinationPath = 'public/uploads';
+			$originalFile = time() . $image->getClientOriginalName();
+			$image->storeAs($destinationPath, $originalFile);
+			
+			Post::create([
+				'user_id' => auth()->user()->id,
+			]);
+			PostContext::create([
+				'name' => $request->name,
+				'description' => $request->description,
+				'post_id' => $request->post_id,
+				'lang' => $request->lang
+			]);
+			Image::create([
+				'image' => $originalFile,
+				'post_id' => $request->post_id
+			]);
+			
+			DB::rollBack();
+		} catch (error) {
+			
+			DB::commit();
+		}
 	}
 	
 	/**
