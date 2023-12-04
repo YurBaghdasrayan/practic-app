@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminLoginRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,10 +18,10 @@ class LoginController extends Controller
 	}
 	
 	/**
-	 * @param AdminLoginRequest $request
+	 * @param LoginRequest $request
 	 * @return Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
 	 */
-	public function store(AdminLoginRequest $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+	public function store(LoginRequest $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
 	{
 		$data = $request->except('_token');
 		

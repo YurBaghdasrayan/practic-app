@@ -41,5 +41,4 @@ class RegisterRequest extends FormRequest
 		
 		throw new HttpResponseException($response);
 	}
-	
 }

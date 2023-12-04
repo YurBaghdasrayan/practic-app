@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminLoginRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ModeratorRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Comment;
@@ -38,10 +38,10 @@ class ModeratorController extends Controller
 	}
 	
 	/**
-	 * @param AdminLoginRequest $request
+	 * @param LoginRequest $request
 	 * @return Application|\Illuminate\Foundation\Application|RedirectResponse|Redirector
 	 */
-	public function store(AdminLoginRequest $request): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
+	public function store(LoginRequest $request): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
 	{
 		$data = $request->except('_token');
 		if (Auth::attempt($data)) {

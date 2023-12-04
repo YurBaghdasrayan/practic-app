@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Jobs\RegisterSuccessfullyJob;
 use App\Mail\VerifyMail;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -25,9 +27,9 @@ class RegisterController extends Controller
 		$userData = User::create([
 			'name' => $request->name,
 			'email' => $request->email,
-			'password' => $request->password,
-			'role_id' => $request->role_id,
-			'email_verify_token'=>$random
+			'password' => Hash::make($request->password),
+			'role_id' => Role::USER_ID,
+			'email_verify_token' => $random
 		]);
 		Mail::to($userData->email)->queue(new VerifyMail($random));
 		

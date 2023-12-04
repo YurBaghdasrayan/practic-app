@@ -31,6 +31,4 @@
         </tbody>
     </table>
     {{ $userPosts->render("pagination::bootstrap-4") }}
-
-
 @endsection

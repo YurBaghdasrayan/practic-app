@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostContext;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PostService
 {
@@ -19,29 +20,29 @@ class PostService
 		try {
 			DB::beginTransaction();
 			
-			$image = $request->file('image');
-			$destinationPath = 'public/uploads';
-			$originalFile = time() . $image->getClientOriginalName();
-			$image->storeAs($destinationPath, $originalFile);
-			
-			Post::create([
+			$post = Post::create([
 				'user_id' => auth()->user()->id,
 			]);
+			
 			PostContext::create([
 				'name' => $request->name,
 				'description' => $request->description,
-				'post_id' => $request->post_id,
-				'lang' => $request->lang
+				'post_id' => $post->id,
+				'lang' => 'eng'
 			]);
-			Image::create([
-				'image' => $originalFile,
-				'post_id' => $request->post_id
-			]);
-			
-			DB::rollBack();
-		} catch (error) {
-			
+			if ($request->file('image')) {
+				$image = $request->file('image');
+				$destinationPath = 'public/uploads';
+				$originalFile = time() . $image->getClientOriginalName();
+				$image->storeAs($destinationPath, $originalFile);
+				$image = Image::create([
+					'image' => $originalFile,
+					'post_id' => $post->id
+				]);
+			}
 			DB::commit();
+		} catch (error) {
+			DB::rollBack();
 		}
 	}
 	
@@ -53,21 +54,29 @@ class PostService
 	public function update($id, $request): void
 	{
 		$data = $request->all();
-		$postShow = Post::find($id);
+		$postShow = PostContext::find($id);
+		
 		
 		$newDara = array_filter($data, function ($data) {
 			return $data !== null;
 		});
 		
-		$image = $request->file('image');
-		$destinationPath = 'public/uploads';
-		$originalFile = time() . $image->getClientOriginalName();
-		$image->storeAs($destinationPath, $originalFile);
-		
 		$postShow->update([
 			'name' => $newDara['name'],
 			'description' => $newDara['description'],
-			'image' => $originalFile,
 		]);
+		
+		if ($request->file('image')) {
+			$image = $request->file('image');
+			$destinationPath = 'public/uploads';
+			$originalFile = time() . $image->getClientOriginalName();
+			$image->storeAs($destinationPath, $originalFile);
+			$image = Image::create([
+				'image' => $originalFile,
+				'post_id' => $postShow->post_id
+			]);
+			
+		}
+		
 	}
 }

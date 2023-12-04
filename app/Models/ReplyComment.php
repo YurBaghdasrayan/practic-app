@@ -11,8 +11,15 @@ class ReplyComment extends Model
 	
 	protected $guarded = [];
 	
+	
 	public function comment(): \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
 		return $this->belongsTo(Comment::class);
 	}
+	
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
+	
 }

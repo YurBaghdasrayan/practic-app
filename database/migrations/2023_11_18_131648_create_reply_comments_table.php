@@ -13,15 +13,15 @@ return new class extends Migration {
 		Schema::create('reply_comments', function (Blueprint $table) {
 			$table->id();
 			$table->string('reply');
-			$table->string('file');
+			$table->string('file')->nullable();
+			$table->unsignedBigInteger('commentable_id')->unsigned()->index();
+			$table->foreign('commentable_id')->references('id')->on('comments')->onDelete('cascade');
+			$table->string('commentable_type');
 			$table->bigInteger('user_id')->unsigned()->index();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-			$table->bigInteger('comment_id')->unsigned()->index();
-			$table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
 			$table->timestamps();
 		});
 	}
-	
 	/**
 	 * Reverse the migrations.
 	 */

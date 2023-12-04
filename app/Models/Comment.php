@@ -7,23 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory;
-	
 	protected $guarded = [];
+	
+	use HasFactory;
+	
+	public function commentable()
+	{
+		return $this->morphTo();
+	}
+	
+	public function replies()
+	{
+		return $this->morphMany(ReplyComment::class, 'commentable');
+	}
+	
 	
 	public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
 		return $this->belongsTo(User::class);
 	}
-	
+
 	public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
 		return $this->belongsTo(Post::class);
 	}
-	
-	public function commentreply(): \Illuminate\Database\Eloquent\Relations\HasMany
-	{
-		return $this->hasMany(ReplyComment::class);
-	}
-	
 }

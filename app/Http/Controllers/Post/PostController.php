@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\PostContext;
 use App\Services\PostService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -16,7 +17,16 @@ class PostController extends Controller
 	 */
 	public function index()
 	{
-		//
+		$post = Post::where('user_id', auth()->user()->id)->with(['postcontext', 'user'])->get();
+		
+		return response()->json($post);
+	}
+	
+	public function allPosts()
+	{
+		$post = Post::with(['postcontext', 'user'])->get();
+		
+		return response()->json($post);
 	}
 	
 	/**
@@ -32,12 +42,14 @@ class PostController extends Controller
 	 */
 	public function store(PostRequest $request, PostService $service)
 	{
+		Log::info('Custom log entry', ['key' => $request->file('image')]);
+		
 		$service->store($request);
 		
 		return response()->json([
 			'success' => true,
-			'message' => 'post successfully created'
-		], 201);
+			'post' => 'post successfully created'
+		], 200);
 	}
 	
 	/**
@@ -51,6 +63,13 @@ class PostController extends Controller
 			'success' => true,
 			'post' => $postShow
 		], 200);
+	}
+	
+	public function postShow($id)
+	{
+		$post = Post::where('id', $id)->with(['comments.user','comments.replies','user','postcontext'])->paginate(4);
+		
+		return response()->json($post);
 	}
 	
 	/**
@@ -78,6 +97,19 @@ class PostController extends Controller
 	 */
 	public function destroy(string $id)
 	{
-		//
+		Post::where('id', $id)->delete();
+		
+		return response()->json([
+			'success' => true,
+			'message' => 'post deleted successfully '
+		], 200);
 	}
+	
+	public function getPost($id)
+	{
+		$post = PostContext::where('post_id', $id)->get();
+		
+		return response()->json($post);
+	}
+	
 }
