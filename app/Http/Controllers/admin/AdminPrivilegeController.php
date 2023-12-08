@@ -1,26 +1,39 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Jobs\RegisterSuccessfullyJob;
 use App\Mail\VerifyMail;
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\JsonResponse;
+use App\Services\AdminPrivilegeService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-class RegisterController extends Controller
+class AdminPrivilegeController extends Controller
 {
-	/**
-	 * @param RegisterRequest $request
-	 * @return JsonResponse
-	 */
-	public function store(RegisterRequest $request): \Illuminate\Http\JsonResponse
+	
+	public function blockUser($id, AdminPrivilegeService $service)
+	{
+		$service->blockUser($id);
+		
+		return response()->json([
+			'success' => true,
+			'message' => 'user successfully blocked'
+		], 200);
+	}
+	
+	public function createModerator(RegisterRequest $request)
 	{
 		$random = Str::random(40);
 		
@@ -38,5 +51,6 @@ class RegisterController extends Controller
 			'success' => true,
 			'message' => 'user successfully registered'
 		], 201);
+		
 	}
 }

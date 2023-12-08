@@ -6,24 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
-use App\Models\ReplyComment;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+
 
 class CommentController extends Controller
 {
-	public function index($id)
-	{
-		$post = Comment::where('post_id', $id)->get();
-		return response()->json($post);
-	}
-	
 	/**
-	 * @param CommentRequest $request
-	 * @return JsonResponse
+	 * Store a newly created resource in storage.
 	 */
-	public function store(CommentRequest $request): JsonResponse
+	public function store(CommentRequest $request)
 	{
 		if ($request->file('file')) {
 			$image = $request->file('file');
@@ -35,7 +25,7 @@ class CommentController extends Controller
 		$post->comments()->create([
 			'comment' => $request->comment,
 			'user_id' => auth()->user()->id,
-			'file' => $originalFile??null,
+			'file' => $originalFile ?? null,
 		]);
 		return response()->json([
 			'success' => true,
@@ -43,7 +33,19 @@ class CommentController extends Controller
 		], 200);
 	}
 	
-	public function delete($id)
+	/**
+	 * Display the specified resource.
+	 */
+	public function show(string $id)
+	{
+		$post = Comment::where('post_id', $id)->get();
+		return response()->json($post);
+	}
+	
+	/**
+	 * Remove the specified resource from storage.
+	 */
+	public function destroy(string $id)
 	{
 		Comment::where('id', $id)->delete();
 		
@@ -51,16 +53,5 @@ class CommentController extends Controller
 			'success' => true,
 			'message' => 'comment deleted successfully '
 		], 200);
-	}
-	
-	public function commentReplyDelete($id)
-	{
-		ReplyComment::where('id', $id)->delete();
-		
-		return response()->json([
-			'success' => true,
-			'message' => 'comment deleted successfully '
-		], 200);
-		
 	}
 }

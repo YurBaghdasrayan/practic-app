@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\BlockUserMail;
+use App\Mail\VerifyMail;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -27,7 +28,6 @@ class AdminPrivilegeService
 	{
 		Comment::where('id', $id)->delete();
 	}
-	
 	/**
 	 * @param $id
 	 * @return void
@@ -35,6 +35,7 @@ class AdminPrivilegeService
 	public function blockUser($id): void
 	{
 		$user = User::find($id);
+		
 		Mail::to($user->email)->queue(new BlockUserMail($user));
 		$user->delete();
 	}

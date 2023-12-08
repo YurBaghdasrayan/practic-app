@@ -12,6 +12,10 @@ class VerificationController extends Controller
 {
 	use VerifiesEmails;
 	
+	/**
+	 * @param $token
+	 * @return void
+	 */
 	public function verify($token): void
 	{
 		$user = User::where('email_verify_token', $token)->update(['email_verified_at' => Carbon::now()]);

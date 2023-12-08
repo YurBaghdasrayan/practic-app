@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PostRequest;
+use App\Http\Resources\PostResource;
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostContext;
 use App\Services\PostService;
@@ -17,24 +19,16 @@ class PostController extends Controller
 	 */
 	public function index()
 	{
-		$post = Post::where('user_id', auth()->user()->id)->with(['postcontext', 'user'])->get();
+		$post = Post::with(['postcontext', 'user'])->get();
 		
 		return response()->json($post);
 	}
 	
 	public function allPosts()
 	{
-		$post = Post::with(['postcontext', 'user'])->get();
+		$post = Post::where('user_id', auth()->user()->id)->with(['postcontext', 'user'])->get();
 		
 		return response()->json($post);
-	}
-	
-	/**
-	 * Show the form for creating a new resource.
-	 */
-	public function create()
-	{
-		//
 	}
 	
 	/**
@@ -42,34 +36,21 @@ class PostController extends Controller
 	 */
 	public function store(PostRequest $request, PostService $service)
 	{
-		Log::info('Custom log entry', ['key' => $request->file('image')]);
-		
 		$service->store($request);
 		
 		return response()->json([
 			'success' => true,
-			'post' => 'post successfully created'
-		], 200);
+			'post' => 'Post created successfully'
+		], 201);
 	}
 	
 	/**
 	 * Display the specified resource.
 	 */
-	public function show(string $id, $lang, PostService $service)
+	public function show(string $id, PostService $service)
 	{
-		$postShow = PostContext::where('post_id', $id)->where('lang', $lang)->get();
-		
-		return response()->json([
-			'success' => true,
-			'post' => $postShow
-		], 200);
-	}
-	
-	public function postShow($id)
-	{
-		$post = Post::where('id', $id)->with(['comments.user','comments.replies','user','postcontext'])->paginate(4);
-		
-		return response()->json($post);
+		$post = Post::where('id', $id)->with('comments.replies')->first();
+		return response()->json(new PostResource($post));
 	}
 	
 	/**
@@ -77,7 +58,10 @@ class PostController extends Controller
 	 */
 	public function edit(string $id)
 	{
-		//
+		$post = PostContext::where('post_id', $id)->get();
+		
+		return response()->json($post);
+		
 	}
 	
 	/**
@@ -88,7 +72,7 @@ class PostController extends Controller
 		$service->update($id, $request);
 		return response()->json([
 			'success' => true,
-			'message' => 'post successfully updated'
+			'message' => 'Post updated successfully'
 		], 200);
 	}
 	
@@ -101,15 +85,7 @@ class PostController extends Controller
 		
 		return response()->json([
 			'success' => true,
-			'message' => 'post deleted successfully '
+			'message' => 'Post deleted successfully '
 		], 200);
 	}
-	
-	public function getPost($id)
-	{
-		$post = PostContext::where('post_id', $id)->get();
-		
-		return response()->json($post);
-	}
-	
 }

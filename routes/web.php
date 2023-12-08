@@ -37,12 +37,12 @@ Route::get('/verify/{token}', [\App\Http\Controllers\Auth\VerificationController
 Route::middleware(['admin'])->group(function () {
 	Route::group(['prefix' => 'admin'], function () {
 		Route::resource('/home', \App\Http\Controllers\admin\HomeController::class);
-		Route::get('/users-posts', [\App\Http\Controllers\admin\AdminPrivilege::class, 'usersPost'])->name('admin.users.posts');
-		Route::get('/users-list', [\App\Http\Controllers\admin\AdminPrivilege::class, 'usersList'])->name('admin.users.list');
-		Route::get('/users-comments/{id?}', [\App\Http\Controllers\admin\AdminPrivilege::class, 'usersComments'])->name('admin.users.comments');
-		Route::get('/delete/{id?}', [\App\Http\Controllers\admin\AdminPrivilege::class, 'destroy'])->name('admin.posts.delete');
-		Route::get('/block-user/{id?}', [\App\Http\Controllers\admin\AdminPrivilege::class, 'blockUser'])->name('admin.block.user');
-		Route::get('/delete-comment/{id?}', [\App\Http\Controllers\admin\AdminPrivilege::class, 'destroyComment'])->name('admin.delete.comment');
+		Route::get('/users-posts', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'usersPost'])->name('admin.users.posts');
+		Route::get('/users-list', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'usersList'])->name('admin.users.list');
+		Route::get('/users-comments/{id?}', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'usersComments'])->name('admin.users.comments');
+		Route::get('/delete/{id?}', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'destroy'])->name('admin.posts.delete');
+		Route::get('/block-user/{id?}', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'blockUser'])->name('admin.block.user');
+		Route::get('/delete-comment/{id?}', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'destroyComment'])->name('admin.delete.comment');
 	});
 });
 

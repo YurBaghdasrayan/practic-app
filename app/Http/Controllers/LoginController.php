@@ -22,8 +22,10 @@ class LoginController extends Controller
 		if (Auth::attempt($data)) {
 			$token = auth()->user()->createToken('API Token')->accessToken;
 			
-			return response(['user' => auth()->user(), 'token' => $token]);
-			
+			return response()->json([
+				'user' => auth()->user(),
+				'token' => $token
+			], 200);
 		} else {
 			return response()->json([
 				'success' => false,
@@ -31,11 +33,4 @@ class LoginController extends Controller
 			], 401);
 		}
 	}
-	
-	public function logout()
-	{
-		\auth()->logout();
-		return redirect('/login');
-	}
-	
 }

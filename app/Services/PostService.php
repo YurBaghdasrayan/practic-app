@@ -16,7 +16,6 @@ class PostService
 	 */
 	public function store($request): void
 	{
-		
 		try {
 			DB::beginTransaction();
 			
@@ -30,15 +29,17 @@ class PostService
 				'post_id' => $post->id,
 				'lang' => 'eng'
 			]);
-			if ($request->file('image')) {
-				$image = $request->file('image');
-				$destinationPath = 'public/uploads';
-				$originalFile = time() . $image->getClientOriginalName();
-				$image->storeAs($destinationPath, $originalFile);
-				$image = Image::create([
-					'image' => $originalFile,
-					'post_id' => $post->id
-				]);
+			if ($request->hasFile('images')) {
+				foreach ($request->file('images') as $image) {
+					$destinationPath = 'public/uploads';
+					$originalFile = time() . $image->getClientOriginalName();
+					$image->storeAs($destinationPath, $originalFile);
+					
+					Image::create([
+						'image' => $originalFile,
+						'post_id' => $post->id,
+					]);
+				}
 			}
 			DB::commit();
 		} catch (error) {
@@ -55,7 +56,6 @@ class PostService
 	{
 		$data = $request->all();
 		$postShow = PostContext::find($id);
-		
 		
 		$newDara = array_filter($data, function ($data) {
 			return $data !== null;
@@ -75,8 +75,6 @@ class PostService
 				'image' => $originalFile,
 				'post_id' => $postShow->post_id
 			]);
-			
 		}
-		
 	}
 }

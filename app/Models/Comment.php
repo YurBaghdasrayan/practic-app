@@ -18,8 +18,9 @@ class Comment extends Model
 	
 	public function replies()
 	{
-		return $this->morphMany(ReplyComment::class, 'commentable');
+		return $this->morphMany(self::class, 'commentable');
 	}
+	
 	
 	
 	public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

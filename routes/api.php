@@ -21,19 +21,19 @@ Route::post('/login', [\App\Http\Controllers\LoginController::class, 'store']);
 Route::group(['prefix' => 'moderator'], function () {
 	Route::post('login', [\App\Http\Controllers\Moderator\LoginController::class, 'store']);
 });
+Route::group(['prefix' => 'admin'], function () {
+	Route::post('login', [\App\Http\Controllers\admin\LoginController::class, 'store']);
+});
 
 Route::group(['middleware' => ['auth:api']], function () {
-	Route::resource('/post', \App\Http\Controllers\Post\PostController::class)->except('create', 'edit');
-	Route::post('/post/{post}', [\App\Http\Controllers\Post\PostController::class, 'update']);
-	Route::get('/post-show/{id}', [\App\Http\Controllers\Post\PostController::class, 'postShow']);
+	Route::resource('/post', \App\Http\Controllers\Post\PostController::class)->except('create');
+	Route::resource('/comment', \App\Http\Controllers\Comment\CommentController::class)->except('create', 'edit');
 	Route::get('/all-posts', [\App\Http\Controllers\Post\PostController::class, 'allPosts']);
-	Route::get('/get-post/{id}', [\App\Http\Controllers\Post\PostController::class, 'getPost']);
+	Route::get('/users', [\App\Http\Controllers\User\UserController::class, 'getUsersData']);
 	Route::get('/post/{post?}/{lang?}', [\App\Http\Controllers\Post\PostController::class, 'show']);
-	Route::get('/comment/{id?}', [\App\Http\Controllers\Comment\CommentController::class, 'index']);
-	Route::delete('/comment-delete/{id?}', [\App\Http\Controllers\Comment\CommentController::class, 'delete']);
-	Route::delete('/comment-reply-delete/{id?}', [\App\Http\Controllers\Comment\CommentController::class, 'commentReplyDelete']);
-	Route::post('/comment', [\App\Http\Controllers\Comment\CommentController::class, 'store']);
 	Route::post('/reply-comment', [\App\Http\Controllers\ReplyComment\ReplyCommentController::class, 'store']);
+	Route::get('/block/user/{id?}', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'blockUser']);
+	Route::post('moderator/create', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'createModerator']);
 });
 
 
