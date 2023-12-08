@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -11,24 +14,35 @@ class Comment extends Model
 	
 	use HasFactory;
 	
-	public function commentable()
+	/**
+	 * @return MorphTo
+	 */
+	public function commentable(): MorphTo
 	{
 		return $this->morphTo();
 	}
 	
-	public function replies()
+	/**
+	 * @return MorphMany
+	 */
+	public function replies(): MorphMany
 	{
 		return $this->morphMany(self::class, 'commentable');
 	}
 	
 	
-	
-	public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+	/**
+	 * @return BelongsTo
+	 */
+	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
 	}
-
-	public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+	
+	/**
+	 * @return BelongsTo
+	 */
+	public function post(): BelongsTo
 	{
 		return $this->belongsTo(Post::class);
 	}

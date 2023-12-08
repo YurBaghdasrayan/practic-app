@@ -4,15 +4,22 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-	public function store(LoginRequest $request): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+	/**
+	 * @param LoginRequest $request
+	 * @return Application|Response|JsonResponse|\Illuminate\Contracts\Foundation\Application|ResponseFactory
+	 */
+	public function store(LoginRequest $request)
 	{
 		$data = $request->except('_token');
 		if (Auth::attempt($data)) {

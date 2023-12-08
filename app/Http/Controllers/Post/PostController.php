@@ -7,7 +7,7 @@ use App\Http\Requests\Api\PostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Image;
 use App\Models\Post;
-use App\Models\PostContext;
+use App\Models\PostContent;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,14 +19,14 @@ class PostController extends Controller
 	 */
 	public function index()
 	{
-		$post = Post::with(['postcontext', 'user'])->get();
+		$post = Post::with(['postcontent', 'user'])->get();
 		
 		return response()->json($post);
 	}
 	
 	public function allPosts()
 	{
-		$post = Post::where('user_id', auth()->user()->id)->with(['postcontext', 'user'])->get();
+		$post = Post::where('user_id', auth()->user()->id)->with(['postcontent', 'user'])->get();
 		
 		return response()->json($post);
 	}
@@ -58,7 +58,7 @@ class PostController extends Controller
 	 */
 	public function edit(string $id)
 	{
-		$post = PostContext::where('post_id', $id)->get();
+		$post = PostContent::where('post_id', $id)->get();
 		
 		return response()->json($post);
 		

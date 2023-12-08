@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Image;
 use App\Models\Post;
-use App\Models\PostContext;
+use App\Models\PostContent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -23,7 +23,7 @@ class PostService
 				'user_id' => auth()->user()->id,
 			]);
 			
-			PostContext::create([
+			PostContent::create([
 				'name' => $request->name,
 				'description' => $request->description,
 				'post_id' => $post->id,
@@ -55,7 +55,7 @@ class PostService
 	public function update($id, $request): void
 	{
 		$data = $request->all();
-		$postShow = PostContext::find($id);
+		$postShow = PostContent::find($id);
 		
 		$newDara = array_filter($data, function ($data) {
 			return $data !== null;

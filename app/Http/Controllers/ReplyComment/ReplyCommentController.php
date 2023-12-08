@@ -4,10 +4,15 @@ namespace App\Http\Controllers\ReplyComment;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReplyCommentController extends Controller
 {
+	/**
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
 	public function store(Request $request)
 	{
 		$image = $request->file('file');

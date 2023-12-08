@@ -13,6 +13,7 @@ use App\Services\AdminPrivilegeService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -23,6 +24,11 @@ use Illuminate\Support\Str;
 class AdminPrivilegeController extends Controller
 {
 	
+	/**
+	 * @param $id
+	 * @param AdminPrivilegeService $service
+	 * @return JsonResponse
+	 */
 	public function blockUser($id, AdminPrivilegeService $service)
 	{
 		$service->blockUser($id);
@@ -33,6 +39,10 @@ class AdminPrivilegeController extends Controller
 		], 200);
 	}
 	
+	/**
+	 * @param RegisterRequest $request
+	 * @return JsonResponse
+	 */
 	public function createModerator(RegisterRequest $request)
 	{
 		$random = Str::random(40);
