@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 	Route::post('/reply-comment', [\App\Http\Controllers\ReplyComment\ReplyCommentController::class, 'store']);
 	Route::get('/block/user/{id?}', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'blockUser']);
 	Route::post('moderator/create', [\App\Http\Controllers\admin\AdminPrivilegeController::class, 'createModerator']);
+	Route::post('/search', [\App\Http\Controllers\SearchController::class, 'store']);
 });
 
 

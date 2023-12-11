@@ -7,15 +7,26 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
 	/**
 	 * @return JsonResponse
 	 */
-	public function getUsersData(): JsonResponse
+	public function getUsersData(Request $request): JsonResponse
 	{
-		$user = User::all();
+		$string = $request->search;
+		
+		$array = explode(' ', $string);
+		
+		$array = array_filter($array);
+		
+		if ($request->filled('search')) {
+			$user = User::search('admin  some')->get();
+		} else {
+			$user = User::all();
+		}
 		return response()->json(UserResource::collection($user));
 	}
 }
