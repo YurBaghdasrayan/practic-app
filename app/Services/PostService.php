@@ -5,8 +5,11 @@ namespace App\Services;
 use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostContent;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+
 
 class PostService
 {
@@ -29,21 +32,26 @@ class PostService
 				'post_id' => $post->id,
 				'lang' => 'eng'
 			]);
+			
 			if ($request->hasFile('images')) {
+				$images = [];
 				foreach ($request->file('images') as $image) {
 					$destinationPath = 'public/uploads';
 					$originalFile = time() . $image->getClientOriginalName();
 					$image->storeAs($destinationPath, $originalFile);
 					
-					Image::create([
+					$images[] = [
 						'image' => $originalFile,
 						'post_id' => $post->id,
-					]);
+						'created_at' => Carbon::now(),
+						'updated_at' => Carbon::now(),
+					];
 				}
+				Image::insert($images);
 			}
 			DB::commit();
-		} catch (error) {
-			DB::rollBack();
+		} catch (QueryException $e) {
+			DB::rollBack($e->getMessage());
 		}
 	}
 	

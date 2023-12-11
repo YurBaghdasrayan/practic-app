@@ -13,7 +13,7 @@ class ReplyCommentController extends Controller
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function store(Request $request)
+	public function store(Request $request): JsonResponse
 	{
 		$image = $request->file('file');
 		$originalFile = null;

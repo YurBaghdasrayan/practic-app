@@ -5,18 +5,10 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyMail;
-use App\Models\Comment;
-use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\AdminPrivilegeService;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -29,7 +21,7 @@ class AdminPrivilegeController extends Controller
 	 * @param AdminPrivilegeService $service
 	 * @return JsonResponse
 	 */
-	public function blockUser($id, AdminPrivilegeService $service)
+	public function blockUser($id, AdminPrivilegeService $service): JsonResponse
 	{
 		$service->blockUser($id);
 		
@@ -43,7 +35,7 @@ class AdminPrivilegeController extends Controller
 	 * @param RegisterRequest $request
 	 * @return JsonResponse
 	 */
-	public function createModerator(RegisterRequest $request)
+	public function createModerator(RegisterRequest $request): JsonResponse
 	{
 		$random = Str::random(40);
 		
@@ -61,6 +53,5 @@ class AdminPrivilegeController extends Controller
 			'success' => true,
 			'message' => 'user successfully registered'
 		], 201);
-		
 	}
 }

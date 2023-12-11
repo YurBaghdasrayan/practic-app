@@ -7,19 +7,13 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
-	/**
-	 * @param LoginRequest $request
-	 * @return Application|Response|JsonResponse|\Illuminate\Contracts\Foundation\Application|ResponseFactory
-	 */
-	public function store(LoginRequest $request)
+	public function store(LoginRequest $request): Application|Response|JsonResponse
 	{
 		$data = $request->except('_token');
 		if (Auth::attempt($data)) {

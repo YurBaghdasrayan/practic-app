@@ -5,26 +5,24 @@ namespace App\Http\Controllers\Post;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PostRequest;
 use App\Http\Resources\PostResource;
-use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostContent;
 use App\Services\PostService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
 {
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function index()
+	public function index(): JsonResponse
 	{
 		$post = Post::with(['postcontent', 'user'])->get();
 		
 		return response()->json($post);
 	}
 	
-	public function allPosts()
+	public function allPosts(): JsonResponse
 	{
 		$post = Post::where('user_id', auth()->user()->id)->with(['postcontent', 'user'])->get();
 		
@@ -34,7 +32,7 @@ class PostController extends Controller
 	/**
 	 * Store a newly created resource in storage.
 	 */
-	public function store(PostRequest $request, PostService $service)
+	public function store(PostRequest $request, PostService $service): JsonResponse
 	{
 		$service->store($request);
 		
@@ -47,7 +45,7 @@ class PostController extends Controller
 	/**
 	 * Display the specified resource.
 	 */
-	public function show(string $id, PostService $service)
+	public function show(string $id, PostService $service): JsonResponse
 	{
 		$post = Post::where('id', $id)->with('comments.replies')->first();
 		return response()->json(new PostResource($post));
@@ -56,7 +54,7 @@ class PostController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 */
-	public function edit(string $id)
+	public function edit(string $id): JsonResponse
 	{
 		$post = PostContent::where('post_id', $id)->get();
 		
@@ -67,7 +65,7 @@ class PostController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(PostRequest $request, PostService $service, string $id)
+	public function update(PostRequest $request, PostService $service, string $id): JsonResponse
 	{
 		$service->update($id, $request);
 		return response()->json([
@@ -79,7 +77,7 @@ class PostController extends Controller
 	/**
 	 * Remove the specified resource from storage.
 	 */
-	public function destroy(string $id)
+	public function destroy(string $id): JsonResponse
 	{
 		Post::where('id', $id)->delete();
 		

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 
 
 class CommentController extends Controller
@@ -13,7 +14,7 @@ class CommentController extends Controller
 	/**
 	 * Store a newly created resource in storage.
 	 */
-	public function store(CommentRequest $request)
+	public function store(CommentRequest $request): JsonResponse
 	{
 		if ($request->file('file')) {
 			$image = $request->file('file');
@@ -36,7 +37,7 @@ class CommentController extends Controller
 	/**
 	 * Display the specified resource.
 	 */
-	public function show(string $id)
+	public function show(string $id): JsonResponse
 	{
 		$post = Comment::where('post_id', $id)->get();
 		return response()->json($post);
@@ -45,7 +46,7 @@ class CommentController extends Controller
 	/**
 	 * Remove the specified resource from storage.
 	 */
-	public function destroy(string $id)
+	public function destroy(string $id): JsonResponse
 	{
 		Comment::where('id', $id)->delete();
 		

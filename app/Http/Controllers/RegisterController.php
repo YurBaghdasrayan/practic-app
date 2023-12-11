@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
-use App\Jobs\RegisterSuccessfullyJob;
 use App\Mail\VerifyMail;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -20,7 +17,7 @@ class RegisterController extends Controller
 	 * @param RegisterRequest $request
 	 * @return JsonResponse
 	 */
-	public function store(RegisterRequest $request): \Illuminate\Http\JsonResponse
+	public function store(RegisterRequest $request): JsonResponse
 	{
 		$random = Str::random(40);
 		

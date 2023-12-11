@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 
 class PostContent extends Model
 {
@@ -13,7 +14,7 @@ class PostContent extends Model
 	protected $table = 'post_context';
 	
 	
-	public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+	public function post(): Relations\BelongsTo
 	{
 		return $this->belongsTo(Post::class);
 	}

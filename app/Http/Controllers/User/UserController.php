@@ -13,7 +13,7 @@ class UserController extends Controller
 	/**
 	 * @return JsonResponse
 	 */
-	public function getUsersData()
+	public function getUsersData(): JsonResponse
 	{
 		$user = User::all();
 		return response()->json(UserResource::collection($user));

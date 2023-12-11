@@ -8,25 +8,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
 	use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-	protected $softDelete = true;
+	
+	protected bool $softDelete = true;
 	
 	protected $guarded = [];
 	
-	public function role(): \Illuminate\Database\Eloquent\Relations\HasMany
+	public function role(): Relations\HasMany
 	{
 		return $this->hasMany(Role::class);
 	}
 	
-	public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+	public function posts(): Relations\HasMany
 	{
 		return $this->hasMany(Post::class);
 	}
 	
-	public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+	public function comments(): Relations\HasMany
 	{
 		return $this->hasMany(Comment::class);
 	}
